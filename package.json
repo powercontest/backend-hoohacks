@@ -1,0 +1,28 @@
+{
+  "name": "powercontestbackend",
+  "version": "1.0.0",
+  "description": "A HTTP app to help run powercontest",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/powercontest/backend.git"
+  },
+  "keywords": [
+    "powercontest",
+    "power",
+    "contest",
+    "hoohacks",
+    "hoohacks2020",
+    "hackuva",
+    "dgramop"
+  ],
+  "author": "Dhruv Gramopadhye & the powercontest team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/powercontest/backend/issues"
+  },
+  "homepage": "https://github.com/powercontest/backend#readme"
+}
