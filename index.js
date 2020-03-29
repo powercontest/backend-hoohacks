@@ -164,6 +164,7 @@ function freshen(){
         for(meterid of Object.keys(resp))
         {
             ic++
+            console.log(meterid)
             resp[meterid].meterID=meterid
             Meter.findOne({ID:meterid},function(e,m){
                 if(m!=null) resp[meterid].name=m.owner;
