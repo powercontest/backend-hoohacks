@@ -62,7 +62,18 @@ app.get("/getmeter",function(req,res){
 }) //send back a token or a cookie? We'll do both
 
 app.post("/register",function(req,res){
-
+    User.findOne({username:req.query.user},function(e,user){
+        if(user==null){
+            new User({
+                username:req.query.user,
+                hash:crypto.createHash("sha256").update(req.query.password).digest("base64"),
+                email:req.query.email,
+                meter:req.query.meter,//meterID
+                signupDate:Date.now()
+            }).save(function(){res.send("Welcome")})
+        }
+        else res.send("username taken")
+    })
 })
 
 app.post("/claimMeter",function(req,res){ //must relogin because i dnt care
