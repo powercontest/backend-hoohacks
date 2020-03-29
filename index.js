@@ -119,11 +119,9 @@ function getRunningAverage(entries,period)
 */
 
 //hackathon version only goes town, community, meter
-app.get("/meters/:country/:state/:town/",function(req,res){
-    res.send(req.params)
-})
 
-app.get("/meters/:country/:state/:town/:community/", function(req,res){
+
+app.get("/entries/:country/:state/:town/:community/", function(req,res){
     AMREntry.find({
             "radioModule.name":req.params.community,//community is defined for what the reciever can recieve
             "radioModule.where.town":req.params.town,
@@ -134,10 +132,49 @@ app.get("/meters/:country/:state/:town/:community/", function(req,res){
     })
 })
 
-app.get("/meters/:country/:state/:town/:community/:meter/",function(req,res){
-    res.send(req.params)
+app.get("/meters/:country/:state/:town/:community/", function(req,res){
+    let resp=[];
+    AMREntry.find({
+            "radioModule.name":req.params.community,//community is defined for what the reciever can recieve
+            "radioModule.where.town":req.params.town,
+            "radioModule.where.state":req.params.state,
+            "radioModule.where.country":req.params.country
+    },null, {sort:"-Time"},function(e,objs){
+
+        //go through all the entries 
+
+        let resp={}
+        for(obj of objs)
+        {
+            if(resp[obj.Message.ID]==undefined)
+            {
+                resp[obj.Message.ID]={end:obj.Time,endConsumption:obj.Message.Consumption}
+            }
+            else if(resp[obj.Message.ID].end!=null && (resp[obj.Message.ID].start==null || Math.abs(resp[obj.Message.ID].end-resp[obj.Message.ID].start-(1800*1000))>Math.abs(resp[obj.Message.ID].end-obj.Time-(1800*1000)) ))
+            {
+                resp[obj.Message.ID].start=obj.Time;
+                resp[obj.Message.ID].startConsumption=obj.Message.Consumption;
+                resp[obj.Message.ID].adjusted=(resp[obj.Message.ID].endConsumption-resp[obj.Message.ID].startConsumption)*1800000/(resp[obj.Message.ID].end-resp[obj.Message.ID].start)
+            }
+        }
+        let r=[];
+        for(meterid of Object.keys(resp))
+        {
+            resp[meterid].meterID=meterid
+            r.push(resp[meterid])
+        }
+        r=r.sort(function(m0,m1){return m0["adjusted"]-m1["adjusted"];})
+        res.send(r)
+    })
 })
 
-app.get("/getspecificLimesting")
+app.get("/entries/by-id/:meter/",function(req,res){
+    AMREntry.find({
+        "Message.ID":req.params.meter,
+    },null, {sort:"-Time"},function(e,objs){
+        res.send(objs)
+    })
+})
+
 
 let listen=app.listen(9090,()=>{console.log(listen.address().port)})
