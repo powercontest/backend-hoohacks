@@ -132,7 +132,9 @@ app.get("/entries/:country/:state/:town/:community/", function(req,res){
     })
 })
 
-app.get("/meters/:country/:state/:town/:community/", function(req,res){
+let r=[];
+
+setInterval(function(){
     let resp=[];
     AMREntry.find({
             "radioModule.name":req.params.community,//community is defined for what the reciever can recieve
@@ -156,20 +158,23 @@ app.get("/meters/:country/:state/:town/:community/", function(req,res){
                 resp[obj.Message.ID].startConsumption=obj.Message.Consumption;
                 resp[obj.Message.ID].adjusted=(resp[obj.Message.ID].endConsumption-resp[obj.Message.ID].startConsumption)*1800000/(resp[obj.Message.ID].end-resp[obj.Message.ID].start)
             }
-            else if(resp[obj.Message.ID].end!=null && resp[obj.Message.ID].start!=null && resp[obj.Message.ID].start < obj.Time){ //our time is earlier than the start time
+            else if(resp[obj.Message.ID].end!=null && resp[obj.Message.ID].start!=null && resp[obj.Message.ID].start < obj.Time+ (3600*1000*2)){ //our time is earlier than the start time
                 obj.remove();
-                //this is not a start event or an end event currently, so it's not a necessary datapoint. it's before the start which has already been set and is not itself an start
+                //this is not a start event or an end event currently, so it's not a necessary datapoint. it's before the start which has already been set and is not itself an start. We already eliminated this as a candidate for starting in the above if statement
             }
         }
-        let r=[];
+        r=[];
         for(meterid of Object.keys(resp))
         {
             resp[meterid].meterID=meterid
             r.push(resp[meterid])
         }
         r=r.sort(function(m0,m1){return m0["adjusted"]-m1["adjusted"];})
-        res.send(r)
     })
+},10000)
+
+app.get("/meters/:country/:state/:town/:community/", function(req,res){
+    res.send(r)
 })
 
 app.get("/entries/by-id/:meter/",function(req,res){
