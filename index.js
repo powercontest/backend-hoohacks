@@ -168,9 +168,12 @@ function freshen(){
         r=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
         for(i in r)
         {
-            Meter.findOne({ID:r[i].meterid},function(e,m){
-                if(m!=null) r[i].name=m.owner;
-                else r[i].name="unclaimed"; //some dude is gonna set their username as unclaimed
+            Meter.findOne({ID:r[i].meterID},function(e,m){
+                let n=r[i]
+                if(m!=null) n.name=m.owner;
+                else n.name="unclaimed"; //some dude is gonna set their username as unclaimed
+                r[i]=n
+                console.log(r[i])
             })
         }
     })
