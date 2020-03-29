@@ -167,7 +167,7 @@ setInterval(function(){
         }
         for(i in r)
         {
-            Meter.findOne({ID:r[i].Message.ID},function(e,m){
+            Meter.findOne({ID:r[i].meterid},function(e,m){
                 if(m!=null) r[i].name=m.owner;
             })
         }
