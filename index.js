@@ -180,7 +180,7 @@ function freshen(){
 setInterval(freshen,10000)
 
 app.get("/meters/:country/:state/:town/:community/", function(req,res){
-    res.send(r) //hardcoded endpoint pretty much, country state town community are fixed
+    res.send(g) //hardcoded endpoint pretty much, country state town community are fixed
 })
 
 app.get("/entries/by-id/:meter/",function(req,res){
