@@ -110,7 +110,7 @@ app.get("/claimMeter",function(req,res){ //must relogin because i dnt care
     User.findOne({username:req.query.user},function(e,user){
         if(crypto.createHash("sha256").update(req.query.password).digest("base64")==user.hash)
         {
-            user.meter=req.query.meterid;
+            user.meter=req.query.meterid; //make sure to remove existing meter, we don't really check to re-assign or keep the old meter pointing to something valid
             user.save(function(){
                 Meter.findOne({ID:req.query.meterid},function(e,m){
                     if(m!=null)
