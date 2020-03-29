@@ -134,7 +134,7 @@ app.get("/entries/:country/:state/:town/:community/", function(req,res){
 
 let r=[];
 
-setInterval(function(){
+function freshen(){
     let resp=[];
     AMREntry.find({
     },null, {sort:"-Time"},function(e,objs){
@@ -174,7 +174,9 @@ setInterval(function(){
         r=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
         console.log(r)
     })
-},10000)
+}
+
+setInterval(freshen,10000)
 
 app.get("/meters/:country/:state/:town/:community/", function(req,res){
     res.send(r) //hardcoded endpoint pretty much, country state town community are fixed
@@ -190,3 +192,4 @@ app.get("/entries/by-id/:meter/",function(req,res){
 
 
 let listen=app.listen(80,()=>{console.log(listen.address().port)})
+freshen()
