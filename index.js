@@ -121,8 +121,9 @@ app.get("/meterdetail",function(req,res){
             r.current=g[i]
         }
     }
-    AMREntry.find({"Message.ID":req.query.meterid},function(e,m){
+    AMREntry.find({"Message.ID":req.query.meterid},null,{sort:"-Time",limit:100},function(e,m){
         r.entries=m;
+        res.send(r)
     })
     //returns rank, location, owner, and maybe some past data as well, all the recent records
 })
