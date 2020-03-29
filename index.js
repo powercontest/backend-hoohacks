@@ -172,6 +172,7 @@ function freshen(){
                 r.push(resp[meterid])
                 if(--ic==0)
                 {
+                    console.log("sorting")
                     g=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
                 }//assumes won't call back before loop loops lol
             })
