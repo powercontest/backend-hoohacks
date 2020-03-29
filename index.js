@@ -132,7 +132,7 @@ app.get("/entries/:country/:state/:town/:community/", function(req,res){
     })
 })
 
-let r=[];
+let g=[];
 
 function freshen(){
     let resp=[];
@@ -142,6 +142,7 @@ function freshen(){
         //go through all the entries 
 
         let resp={}
+        let r=[]
         for(obj of objs)
         {
             if(resp[obj.Message.ID]==undefined)
@@ -159,21 +160,18 @@ function freshen(){
                 //this is not a start event or an end event currently, so it's not a necessary datapoint. it's before the start which has already been set and is not itself an start. We already eliminated this as a candidate for starting in the above if statement
             }
         }
-        r=[];
         for(meterid of Object.keys(resp))
         {
             resp[meterid].meterID=meterid
             r.push(resp[meterid])
         }
-        r=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
-        for(i in r)
+        g=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
+        for(i in g)
         {
-            Meter.findOne({ID:r[i].meterID},function(e,m){
-                let n=r[i]
-                if(m!=null) n.name=m.owner;
-                else n.name="unclaimed"; //some dude is gonna set their username as unclaimed
-                r[i]=n
-                console.log(r[i])
+            Meter.findOne({ID:g[i].meterID},function(e,m){
+                if(m!=null) g[i].name=m.owner;
+                else g[i].name="unclaimed"; //some dude is gonna set their username as unclaimed
+                console.log(g)
             })
         }
     })
