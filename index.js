@@ -77,9 +77,9 @@ app.get("/register",function(req,res){
                     if(m!=null)
                     {
                         m.owner=req.query.user;
-                        m.where.community=req.query.community
-                        m.where.town=req.query.town
-                        m.where.state=req.query.state
+                        m.where.community="haverhill",//req.query.community
+                        m.where.town="herndon",//req.query.town
+                        m.where.state="va",//req.query.state
                         m.where.country="us"
                         m.save(function(){res.send("updated")})
                     }
@@ -88,9 +88,9 @@ app.get("/register",function(req,res){
                             owner:req.query.user,
                             ID:req.query.meterid,
                             where:{
-                                community:req.query.community,
-                                town:req.query.town,
-                                state:req.query.state,
+                                community:"haverhill",//req.query.community,
+                                town:"herndon",//req.query.town,
+                                state:"va",//req.query.state,
                                 country:"us"
                             }
                         }).save(function(){
@@ -116,9 +116,9 @@ app.get("/claimMeter",function(req,res){ //must relogin because i dnt care
                     if(m!=null)
                     {
                         m.owner=req.query.user;
-                        m.where.community=req.query.community
-                        m.where.town=req.query.town
-                        m.where.state=req.query.state
+                        m.where.community="haverhill"//req.query.community
+                        m.where.town="herndon",//req.query.town
+                        m.where.state="va",//req.query.state
                         m.where.country="us"
                         m.save(function(){res.send("updated")})
                     }
@@ -127,9 +127,9 @@ app.get("/claimMeter",function(req,res){ //must relogin because i dnt care
                             owner:req.query.user,
                             ID:req.query.meterid,
                             where:{
-                                community:req.query.community,
-                                town:req.query.town,
-                                state:req.query.state,
+                                community:"haverhill",//req.query.community,
+                                town:"herndon",//req.query.town,
+                                state:"va",//req.query.state,
                                 country:"us"
                             }
                         }).save(function(){
