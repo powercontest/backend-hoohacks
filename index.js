@@ -171,7 +171,7 @@ setInterval(function(){
                 if(m!=null) r[i].name=m.owner;
             })
         }
-        r=r.sort(function(m0,m1){return m0["adjusted"]==null ? -1 : m1["adjusted"]==null ? 1 : m0["adjusted"]-m1["adjusted"];})
+        r=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
         console.log(r)
     })
 },10000)
