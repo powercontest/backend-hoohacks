@@ -165,6 +165,7 @@ function freshen(){
             resp[meterid].meterID=meterid
             r.push(resp[meterid])
         }
+        r=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
         for(i in r)
         {
             Meter.findOne({ID:r[i].meterid},function(e,m){
@@ -172,8 +173,6 @@ function freshen(){
                 else r[i].name="unclaimed"; //some dude is gonna set their username as unclaimed
             })
         }
-        r=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
-        console.log(r)
     })
 }
 
