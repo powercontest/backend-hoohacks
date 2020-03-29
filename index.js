@@ -169,7 +169,8 @@ app.get("/submitAmrJSON",function(req,res){
 
     //rebuild shape of json to prevent random crap from getting put into mongo, make sure to flatten
     let og=JSON.parse(req.query.json)
-    Meter.findOne({ID:og["Message"]["ID"].toString()},function(e,m){
+    Meter.findOne({ID:og["Message"]["ID"]},function(e,m){
+        console.log(m)
         new AMREntry({
             Time:new Date(og["Time"]).getTime(),
             Offset:og["Offset"],
