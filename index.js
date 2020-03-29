@@ -51,16 +51,54 @@ const AMREntry=mongoose.model("AMREntry",new mongoose.Schema({
 }))
 //get listings
 
-app.post("/login",function(req,res){
-    res.signedCookies()
+app.get("/getmeter",function(req,res){
+    User.findOne({username:req.query.user},function(e,user){
+        if(crypto.createHash("sha256").update(req.query.password).digest("base64")==user.hash)
+        {
+            res.send(user)
+        }
+    })
+    
 }) //send back a token or a cookie? We'll do both
 
 app.post("/register",function(req,res){
 
 })
 
-app.post("/claimMeter",function(req,res){
-
+app.post("/claimMeter",function(req,res){ //must relogin because i dnt care
+    User.findOne({username:req.query.user},function(e,user){
+        if(crypto.createHash("sha256").update(req.query.password).digest("base64")==user.hash)
+        {
+            user.meter=req.query.meterid;
+            user.save(function(){
+                Meter.findOne({ID:req.query.meterid},function(e,m){
+                    if(m!=null)
+                    {
+                        m.owner=req.query.user;
+                        m.where.community=req.query.community
+                        m.where.town=req.query.town
+                        m.where.state=req.query.state
+                        m.where.country="us"
+                        m.save(function(){res.send("updated")})
+                    }
+                    else {
+                        new Meter({
+                            owner:req.query.user,
+                            ID:req.query.meterid,
+                            where:{
+                                community:req.query.community,
+                                town:req.query.town,
+                                state:req.query.state,
+                                country:"us"
+                            }
+                        }).save(function(){
+                            res.send("created")
+                        })
+                    }
+                })
+            })
+        }
+    })
 })
 
 //submit meter data other ptocols and utilities?
