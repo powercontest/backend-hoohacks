@@ -160,20 +160,23 @@ function freshen(){
                 //this is not a start event or an end event currently, so it's not a necessary datapoint. it's before the start which has already been set and is not itself an start. We already eliminated this as a candidate for starting in the above if statement
             }
         }
+        let ic=0;
         for(meterid of Object.keys(resp))
         {
+            ic++
             resp[meterid].meterID=meterid
-            r.push(resp[meterid])
-        }
-        for(i in r)
-        {
-            Meter.findOne({ID:r[i].meterID},function(e,m){
-                if(m!=null) r[i].name=m.owner;
-                else r[i].name="unclaimed"; //some dude is gonna set their username as unclaimed
-                console.log(g)
+            Meter.findOne({ID:meterid},function(e,m){
+                if(m!=null) resp[meterid].name=m.owner;
+                else resp[meterid].name="unclaimed"; //some dude is gonna set their username as unclaimed
+                r.push(resp[meterid])
+                if(--ic==0)
+                {
+                    g=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
+                }//assumes won't call back before loop loops lol
             })
+            
         }
-        g=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
+        
     })
 }
 
