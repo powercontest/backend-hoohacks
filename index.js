@@ -196,7 +196,7 @@ app.get("/submitAmrJSON",function(req,res){
                     country:req.query.country
                 }
             },
-            name: m!=null ? m.owner=="unknown" ? null : m.owner : null
+            name: m!=null ? m.owner : null
         }).save() //possible that the same transmission is caught by two radio modules!
         res.send("Thanks")
     })
@@ -269,6 +269,7 @@ function freshen(){
         for(meterid of Object.keys(resp))
         {
             if(resp[meterid].adjusted==0 || resp[meterid].adjusted==null) continue;
+            if(resp[meterid].name=="unknown")resp[meterid].name=null;
             resp[meterid].meterID=meterid//could go back and assign ranks, this code is garbage i realize this
             r.push(resp[meterid])   
         }
