@@ -134,7 +134,7 @@ app.get("/entries/:country/:state/:town/:community/", function(req,res){
 
 let g=[];
 
-async function freshen(){
+function freshen(){
     let resp=[];
     AMREntry.find({
     },null, {sort:"-Time"},function(e,objs){
@@ -163,17 +163,20 @@ async function freshen(){
         let ic=0;
         for(meterid of Object.keys(resp))
         {
+            ic++;
             resp[meterid].meterID=meterid
-            let m= await Meter.findOne({ID:meterid})
-            
-            if(m!=null) resp[meterid].name=m.owner;
-            else resp[meterid].name="unclaimed"; //some dude is gonna set their username as unclaimed
-            r.push(resp[meterid])
-            console.log(meterid)
-            console.log(resp[meterid])            
+            Meter.findOne({ID:meterid},function(e,m){
+                if(m!=null) resp[meterid].name=m.owner;
+                else resp[meterid].name="unclaimed"; //some dude is gonna set their username as unclaimed
+                r.push(resp[meterid])
+                console.log(meterid)
+                console.log(resp[meterid])   
+                if(--ic==0)
+                {
+                    g=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
+                }
+            })         
         }
-        g=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
-
         
     })
 }
