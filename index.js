@@ -71,13 +71,42 @@ app.get("/register",function(req,res){
                 email:req.query.email,
                 meter:req.query.meter,//meterID
                 signupDate:Date.now()
-            }).save(function(){res.send("Welcome")})
+            }).save(function(){
+
+                Meter.findOne({ID:req.query.meterid},function(e,m){
+                    if(m!=null)
+                    {
+                        m.owner=req.query.user;
+                        m.where.community=req.query.community
+                        m.where.town=req.query.town
+                        m.where.state=req.query.state
+                        m.where.country="us"
+                        m.save(function(){res.send("updated")})
+                    }
+                    else {
+                        new Meter({
+                            owner:req.query.user,
+                            ID:req.query.meterid,
+                            where:{
+                                community:req.query.community,
+                                town:req.query.town,
+                                state:req.query.state,
+                                country:"us"
+                            }
+                        }).save(function(){
+                            res.send("created")
+                        })
+                    }
+                })
+
+                res.send("Welcome")
+            })
         }
         else res.send("username taken")
     })
 })
 
-app.post("/claimMeter",function(req,res){ //must relogin because i dnt care
+app.get("/claimMeter",function(req,res){ //must relogin because i dnt care
     User.findOne({username:req.query.user},function(e,user){
         if(crypto.createHash("sha256").update(req.query.password).digest("base64")==user.hash)
         {
