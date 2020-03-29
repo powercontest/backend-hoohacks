@@ -54,10 +54,12 @@ const AMREntry=mongoose.model("AMREntry",new mongoose.Schema({
 
 app.get("/getmeter",function(req,res){
     User.findOne({username:req.query.user},function(e,user){
-        if(crypto.createHash("sha256").update(req.query.password).digest("base64")==user.hash)
+        if(user==null) res.send({error:"user not found"})
+        else if(crypto.createHash("sha256").update(req.query.password).digest("base64")==user.hash)
         {
             res.send(user)
         }
+        else res.send({error:"incorrect password"})
     })
     
 }) //send back a token or a cookie? We'll do both
@@ -194,7 +196,7 @@ app.get("/submitAmrJSON",function(req,res){
                     country:req.query.country
                 }
             },
-            name: m!=null ? m.owner : "unknown"
+            name: m!=null ? m.owner : null
         }).save() //possible that the same transmission is caught by two radio modules!
         res.send("Thanks")
     })
