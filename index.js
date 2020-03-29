@@ -165,15 +165,15 @@ function freshen(){
             resp[meterid].meterID=meterid
             r.push(resp[meterid])
         }
-        g=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
-        for(i in g)
+        for(i in r)
         {
-            Meter.findOne({ID:g[i].meterID},function(e,m){
-                if(m!=null) g[i].name=m.owner;
-                else g[i].name="unclaimed"; //some dude is gonna set their username as unclaimed
+            Meter.findOne({ID:r[i].meterID},function(e,m){
+                if(m!=null) r[i].name=m.owner;
+                else r[i].name="unclaimed"; //some dude is gonna set their username as unclaimed
                 console.log(g)
             })
         }
+        g=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
     })
 }
 
