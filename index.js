@@ -4,6 +4,7 @@ const app=express()
 const mongoose=require("mongoose")
 mongoose.connect("mongodb://localhost/contest")
 
+const crypto=reqiure("crypto")
 const User=mongoose.model("User",new mongoose.Schema({
     username:String,
     hash:String,
