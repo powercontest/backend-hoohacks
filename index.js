@@ -62,7 +62,7 @@ app.post("/claimMeter",function(req,res){
 
 })
 
-//submit meter data
+//submit meter data other ptocols and utilities?
 app.get("/submitAmrJSON",function(req,res){
     //TODO add authentication to this endpoint to make sure the node sending the data is "valid". maybe some kind of signature from the server
     //{"Time":"2020-03-28T11:48:11.721448-04:00","Offset":0,"Length":0,"Type":"SCM","Message":{"ID":51276197,"Type":5,"TamperPhy":3,"TamperEnc":1,"Consumption":5304698,"ChecksumVal":38044}}
