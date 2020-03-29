@@ -257,7 +257,7 @@ function freshen(){
             {
                 resp[obj.Message.ID].start=obj.Time;
                 resp[obj.Message.ID].startConsumption=obj.Message.Consumption;
-                resp[obj.Message.ID].adjusted=(resp[obj.Message.ID].endConsumption-resp[obj.Message.ID].startConsumption)*1800000/(resp[obj.Message.ID].end-resp[obj.Message.ID].start)
+                resp[obj.Message.ID].adjusted=Math.round(100*(resp[obj.Message.ID].endConsumption-resp[obj.Message.ID].startConsumption)*1800000/(resp[obj.Message.ID].end-resp[obj.Message.ID].start))/100
             }
             else if(resp[obj.Message.ID].end!=null && resp[obj.Message.ID].start!=null && resp[obj.Message.ID].start < obj.Time+ (3600*1000*2)){ //our time is earlier than the start time
                 obj.remove();
