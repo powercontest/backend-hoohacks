@@ -163,22 +163,17 @@ function freshen(){
         let ic=0;
         for(meterid of Object.keys(resp))
         {
-            ic++
             resp[meterid].meterID=meterid
-            Meter.findOne({ID:meterid},function(e,m){
-                if(m!=null) resp[meterid].name=m.owner;
-                else resp[meterid].name="unclaimed"; //some dude is gonna set their username as unclaimed
-                r.push(resp[meterid])
-                if(--ic==0)
-                {
-                    console.log(meterid)
-                    console.log(resp[meterid])
-                    console.log("sorting")
-                    g=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
-                }//assumes won't call back before loop loops lol
-            })
+            let m= await Meter.findOne({ID:meterid})
             
+            if(m!=null) resp[meterid].name=m.owner;
+            else resp[meterid].name="unclaimed"; //some dude is gonna set their username as unclaimed
+            r.push(resp[meterid])
+            console.log(meterid)
+            console.log(resp[meterid])            
         }
+        g=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
+
         
     })
 }
