@@ -172,6 +172,7 @@ setInterval(function(){
             })
         }
         r=r.sort(function(m0,m1){return m0["adjusted"]-m1["adjusted"];})
+        console.log(r)
     })
 },10000)
 
