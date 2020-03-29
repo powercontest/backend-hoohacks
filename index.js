@@ -112,6 +112,21 @@ app.post("/claimMeter",function(req,res){ //must relogin because i dnt care
     })
 })
 
+app.get("/meterdetail",function(req,res){
+    let r={};
+    for(i in g) 
+    {
+        if(g[i].meterID==req.query.meterid){
+            r.rank=i;
+            r.current=g[i]
+        }
+    }
+    AMREntry.find({"Message.ID":req.query.meterid},function(e,m){
+        r.entries=m;
+    })
+    //returns rank, location, owner, and maybe some past data as well, all the recent records
+})
+
 //submit meter data other ptocols and utilities?
 app.get("/submitAmrJSON",function(req,res){
     //TODO add authentication to this endpoint to make sure the node sending the data is "valid". maybe some kind of signature from the server
@@ -219,7 +234,7 @@ function freshen(){
         }
         for(meterid of Object.keys(resp))
         {
-            resp[meterid].meterID=meterid
+            resp[meterid].meterID=meterid//could go back and assign ranks, this code is garbage i realize this
             r.push(resp[meterid])   
         }
         g=r.sort(function(m0,m1){return m0["adjusted"]==null ? 1 : m1["adjusted"]==null ? -1 : m0["adjusted"]-m1["adjusted"];})
