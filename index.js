@@ -196,7 +196,7 @@ app.get("/submitAmrJSON",function(req,res){
                     country:req.query.country
                 }
             },
-            name: m!=null ? m.owner : null
+            name: m!=null ? m.owner=="unknown" ? null : m.owner : null
         }).save() //possible that the same transmission is caught by two radio modules!
         res.send("Thanks")
     })
