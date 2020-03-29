@@ -46,7 +46,8 @@ const AMREntry=mongoose.model("AMREntry",new mongoose.Schema({
             "state":String,
             "country":String
         }
-    }
+    },
+    "name":String
 }))
 //get listings
 
@@ -69,33 +70,39 @@ app.get("/submitAmrJSON",function(req,res){
 
     //new Date("2020-03-28T11:48:11.721448-04:00")
 
+
+
     //rebuild shape of json to prevent random crap from getting put into mongo, make sure to flatten
     let og=JSON.parse(req.query.json)
-    new AMREntry({
-        Time:new Date(og["Time"]).getTime(),
-        Offset:og["Offset"],
-        Length:og["Length"],
-        Type:og["Type"],
-        Message:{
-            ID:og["Message"]["ID"],
-            Type:og["Message"]["Type"], 
-            TamperPhy:og["Message"]["TamperPhy"],
-            TamperEnc:og["Message"]["TamperEnc"],
-            Consumption:og["Message"]["Consumption"],
-            ChecksumVal:og["Message"]["ChecksumVal"]
-        },
-        radioModule:{
-            name:req.query.name,
-            owner:req.query.owner,
-            id:req.query.id,
-            where:{
-                town:req.query.town,
-                state:req.query.state,
-                country:req.query.country
-            }
-        }
-    }).save() //possible that the same transmission is caught by two radio modules!
-    res.send("Thanks")
+    Meter.findOne({ID:og["Message"]["ID"].toString()},function(e,m){
+        new AMREntry({
+            Time:new Date(og["Time"]).getTime(),
+            Offset:og["Offset"],
+            Length:og["Length"],
+            Type:og["Type"],
+            Message:{
+                ID:og["Message"]["ID"],
+                Type:og["Message"]["Type"], 
+                TamperPhy:og["Message"]["TamperPhy"],
+                TamperEnc:og["Message"]["TamperEnc"],
+                Consumption:og["Message"]["Consumption"],
+                ChecksumVal:og["Message"]["ChecksumVal"]
+            },
+            radioModule:{
+                name:req.query.name,
+                owner:req.query.owner,
+                id:req.query.id,
+                where:{
+                    town:req.query.town,
+                    state:req.query.state,
+                    country:req.query.country
+                }
+            },
+            name: m!=null ? m.owner : "unknown"
+        }).save() //possible that the same transmission is caught by two radio modules!
+        res.send("Thanks")
+    })
+    
     //search for Meters to see if we have a record of the meter's location
 })
 
@@ -148,6 +155,7 @@ function freshen(){
             if(resp[obj.Message.ID]==undefined)
             {
                 resp[obj.Message.ID]={end:obj.Time,endConsumption:obj.Message.Consumption}
+                resp[obj.Message.ID].name=obj.name;
             }
             else if(resp[obj.Message.ID].end!=null && (resp[obj.Message.ID].start==null || Math.abs(resp[obj.Message.ID].end-resp[obj.Message.ID].start-(1800*1000))>Math.abs(resp[obj.Message.ID].end-obj.Time-(1800*1000)) ))
             {
