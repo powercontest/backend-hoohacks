@@ -137,10 +137,6 @@ let r=[];
 setInterval(function(){
     let resp=[];
     AMREntry.find({
-            "radioModule.name":req.params.community,//community is defined for what the reciever can recieve
-            "radioModule.where.town":req.params.town,
-            "radioModule.where.state":req.params.state,
-            "radioModule.where.country":req.params.country
     },null, {sort:"-Time"},function(e,objs){
 
         //go through all the entries 
