@@ -61,7 +61,7 @@ app.get("/getmeter",function(req,res){
     
 }) //send back a token or a cookie? We'll do both
 
-app.post("/register",function(req,res){
+app.get("/register",function(req,res){
     User.findOne({username:req.query.user},function(e,user){
         if(user==null){
             new User({
