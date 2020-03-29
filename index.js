@@ -134,7 +134,7 @@ app.get("/entries/:country/:state/:town/:community/", function(req,res){
 
 let g=[];
 
-function freshen(){
+async function freshen(){
     let resp=[];
     AMREntry.find({
     },null, {sort:"-Time"},function(e,objs){
