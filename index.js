@@ -156,6 +156,10 @@ app.get("/meters/:country/:state/:town/:community/", function(req,res){
                 resp[obj.Message.ID].startConsumption=obj.Message.Consumption;
                 resp[obj.Message.ID].adjusted=(resp[obj.Message.ID].endConsumption-resp[obj.Message.ID].startConsumption)*1800000/(resp[obj.Message.ID].end-resp[obj.Message.ID].start)
             }
+            else if(resp[obj.Message.ID].end!=null && resp[obj.Message.ID].start!=null && resp[obj.Message.ID].start < obj.Time){ //our time is earlier than the start time
+                obj.remove();
+                //this is not a start event or an end event currently, so it's not a necessary datapoint. it's before the start which has already been set and is not itself an start
+            }
         }
         let r=[];
         for(meterid of Object.keys(resp))
@@ -177,4 +181,4 @@ app.get("/entries/by-id/:meter/",function(req,res){
 })
 
 
-let listen=app.listen(9090,()=>{console.log(listen.address().port)})
+let listen=app.listen(80,()=>{console.log(listen.address().port)})
