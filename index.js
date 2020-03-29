@@ -236,6 +236,7 @@ function freshen(){
         }
         for(meterid of Object.keys(resp))
         {
+            if(resp[meterid].adjusted==0 || resp[meterid].adjusted==null) continue;
             resp[meterid].meterID=meterid//could go back and assign ranks, this code is garbage i realize this
             r.push(resp[meterid])   
         }
