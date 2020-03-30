@@ -4,9 +4,6 @@ const app=express()
 const mongoose=require("mongoose")
 mongoose.connect("mongodb://localhost/contest")
 
-
-app.use(express.static(__dirname+"/frontendbackend"))
-
 const crypto=require("crypto")
 const User=mongoose.model("User",new mongoose.Schema({
     username:String,
@@ -294,9 +291,6 @@ app.get("/entries/by-id/:meter/",function(req,res){
     })
 })
 
-app.get("/",function(req,res){
-    res.sendFile(__dirname+"/index.html")
-})
 
-let listen=app.listen(9090,()=>{console.log(listen.address().port)})
+let listen=app.listen(80,()=>{console.log(listen.address().port)})
 freshen()
