@@ -83,7 +83,7 @@ app.get("/register",function(req,res){
                         m.where.town="herndon",//req.query.town
                         m.where.state="va",//req.query.state
                         m.where.country="us"
-                        m.save(function(){res.send("updated")})
+                        m.save(function(){/*res.send("updated")*/})
                     }
                     else {
                         new Meter({
@@ -96,7 +96,7 @@ app.get("/register",function(req,res){
                                 country:"us"
                             }
                         }).save(function(){
-                            res.send("created")
+                           // res.send("created")
                         })
                     }
                 })
