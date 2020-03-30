@@ -294,7 +294,7 @@ app.get("/entries/by-id/:meter/",function(req,res){
     })
 })
 
-app.get("/",function(req,res){
+app.get("/dhruvsindex",function(req,res){
     res.sendFile(__dirname+"/index.html")
 })
 
