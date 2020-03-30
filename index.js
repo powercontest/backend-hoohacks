@@ -71,7 +71,7 @@ app.get("/register",function(req,res){
                 username:req.query.user,
                 hash:crypto.createHash("sha256").update(req.query.password).digest("base64"),
                 email:req.query.email,
-                meter:req.query.meter,//meterID
+                meter:req.query.meterid,//meterID
                 signupDate:Date.now()
             }).save(function(){
 
